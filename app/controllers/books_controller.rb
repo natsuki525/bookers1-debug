@@ -4,8 +4,8 @@ class BooksController < ApplicationController
   # GET /books
   # GET /books.json
   def index
-    @book = Book.new
     @books = Book.all
+    @book = Book.new
   end
 
   # GET /books/1
@@ -13,13 +13,11 @@ class BooksController < ApplicationController
   def show
   end
 
-  # GET /books/1/edit
-  def edit
-  end
 
   # POST /books
   # POST /books.json
   def create
+    @books = Book.all
     @book = Book.new(book_params)
     if @book.save
       redirect_to @book, notice: 'Book was successfully created.'
@@ -28,21 +26,27 @@ class BooksController < ApplicationController
     end
   end
 
+  # GET /books/1/edit
+  def edit
+  end
+
   # PATCH/PUT /books/1
   # PATCH/PUT /books/1.json
   def update
-    if @book.update()
-      redirect_to @book, notice: 'Book was successfully updated.'
+    book = Book.find(params[:id])
+    if book.update(book_params)
+      redirect_to book_path(book.id), notice: 'Book was successfully updated.'
     else
-      render :edit
+      redirect_to books_path
     end
   end
 
   # DELETE /books/1
   # DELETE /books/1.json
   def destroy
-    @book.destroy
-    redirect_to books_url, notice: 'Book was successfully destroyed.'
+    book = Book.find(params[:id])
+    book.destroy
+    redirect_to books_path, notice: 'Book was successfully destroyed.'
   end
 
   private
